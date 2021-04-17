@@ -28,7 +28,7 @@ int main() {
 		coco_file.close();
 	}
 	
-	std::string yolo_configuration = "yolov3.tiny.cfg";
+	std::string yolo_configuration = "yolov3-tiny.cfg";
 	std::string yolo_weights = "yolov3-tiny.weights";
 	 
 	// Load the neural network 
@@ -102,18 +102,16 @@ int main() {
 			}
 		}
 
-		std::cout << "Indices before: " << boxes.size() << std::endl;
-
 		float nms_threshold = 0.25;  // The lower the threshold value, the more aggressive the suppression
 		std::vector<int> indices;
 
 		// Removes multiple bounding boxes on the same object. 
-		// Returns indices which is the no. of bounding boxes remaining
+		// Returns indices which is the index of bounding boxes 
+		// For e.g. there were initially 5 bounding boxes, boxes = {2,5,6,9,13}
+		// Suppression got rid of 3 bounding boxes 2,6,9, now only 2 bounding boxes remain containing the indices, indices = {5,13}
 		cv::dnn::NMSBoxes(boxes, confidences, confidence_threshold, nms_threshold, indices); 
-		std::cout << "Indices after: " << indices.size() << std::endl;
 
 		for (auto it = indices.begin(); it != indices.end(); it++) { // Loops through the indices. 
-			std::cout << "*it: " << *it << std::endl;
 			int box_start_x = boxes[*it].x; 
 			int box_start_y = boxes[*it].y; 
 			int box_end_x = boxes[*it].x + boxes[*it].width;  
