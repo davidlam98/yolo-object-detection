@@ -9,7 +9,7 @@
 int main() {
 
 	// Open camera 
-	cv::VideoCapture camera(1);
+	cv::VideoCapture camera(0);
 	if (!camera.isOpened()) {
 		std::cout << "Unable to open camera!" << std::endl;
 	}
@@ -28,8 +28,8 @@ int main() {
 		coco_file.close();
 	}
 	
-	std::string yolo_configuration = "yolov3-tiny.cfg";
-	std::string yolo_weights = "yolov3-tiny.weights";
+	std::string yolo_configuration = "yolov3.cfg";
+	std::string yolo_weights = "yolov3.weights";
 	 
 	// Load the neural network 
 	cv::dnn::Net net = cv::dnn::readNetFromDarknet(yolo_configuration, yolo_weights); // Load the config and weights file
@@ -107,8 +107,8 @@ int main() {
 
 		// Removes multiple bounding boxes on the same object. 
 		// Returns indices which is the index of bounding boxes 
-		// For e.g. there were initially 5 bounding boxes, boxes = {2,5,6,9,13}
-		// Suppression got rid of 3 bounding boxes 2,6,9, now only 2 bounding boxes remain containing the indices, indices = {5,13}
+		// For e.g. there were initially 10 bounding boxes, boxes = {0,1,2,3,4,5,6,7,8,9,10}
+		// Suppression got rid of 6 bounding boxes 0,2,3,7,8,10, now only 4 bounding boxes remain containing the indices, indices = {1,4,5,9}
 		cv::dnn::NMSBoxes(boxes, confidences, confidence_threshold, nms_threshold, indices); 
 
 		for (auto it = indices.begin(); it != indices.end(); it++) { // Loops through the indices. 
